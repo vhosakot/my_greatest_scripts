@@ -1,0 +1,11 @@
+Horizon is now available at http://192.168.122.205/
+Keystone is serving at http://192.168.122.205:5000/v2.0/
+Examples on using novaclient command line is in exercise.sh
+The default users are: admin and demo
+The password: cisco123
+This is your host ip: 192.168.122.205
+
+export OS_USERNAME=admin
+export OS_PASSWORD=cisco123
+export OS_TENANT_NAME=admin
+export OS_AUTH_URL=http://192.168.122.205:5000/v2.0/

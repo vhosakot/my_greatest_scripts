@@ -1,0 +1,39 @@
+###########################################################
+# Update the file /etc/ansible/hosts if needed
+#
+# $ cat /etc/ansible/hosts 
+# [cpnr_local_server]
+# 192.168.122.201    ansible_user=kolla   ansible_ssh_pass=kolla
+# 
+# [cpnr_regional_server]
+# 192.168.122.201    ansible_user=kolla   ansible_ssh_pass=kolla
+# 
+#
+# Run "ansible-playbook test_ansible.yml" to run this
+# playbook. 
+
+# Run "ansible-playbook -v test_ansible.yml" to see output
+# in verbose mode.
+
+# Check for the files cpnr_regional_server and
+# cpnr_local_server in the CentOS VM at /root/
+###########################################################
+
+---
+- hosts: cpnr_regional_server
+  remote_user: root
+  tasks:
+  - name: Ping
+    ping:
+  - name: Write a file to disk
+    command: touch cpnr_regional_server 
+
+- hosts: cpnr_local_server
+  remote_user: root
+  tasks:
+  - name: Ping
+    ping:
+  - name: Write a file to disk
+    command: touch cpnr_local_server
+  - name: Run ls -lrt
+    command: ls -lrt
