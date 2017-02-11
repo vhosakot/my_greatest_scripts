@@ -7,7 +7,13 @@
 # This script searches a regular expression in OpenStack Kolla's IRC logs
 # in a multi-threaded manner.
 #
-# The "link" variable in this script can be changed to search any 
+# This scripts needs the python packages bs4 and lxml. Run the commands below
+# to install them using pip.
+#
+#    pip install bs4
+#    pip install lxml
+#
+# The "link" variable in this script can be changed to search any
 # OpenStack project's IRC logs.
 #
 # For example:  To search OpenStack Neutron IRC logs, set
@@ -89,15 +95,18 @@ f = urllib.urlopen(link)
 irc_page = f.read()
 
 def t_search_in_each_irc_link(irc_link, regexp_to_search):
-    f = urllib.urlopen(irc_link)
-    html_page = f.read()
-    soup = BeautifulSoup(html_page, "lxml")
-    irc_logs = soup.text
-    r = re.findall(regexp_to_search, irc_logs, re.IGNORECASE)
-    if r != []:
-        print "Found in ", irc_link
+    try:
+        f = urllib.urlopen(irc_link)
+        html_page = f.read()
+        soup = BeautifulSoup(html_page, "lxml")
+        irc_logs = soup.text
+        r = re.findall(regexp_to_search, irc_logs, re.IGNORECASE)
+        if r != []:
+            print "Found in ", irc_link
+    except Exception as e:
+        print e
 
-pool = Pool(processes=100)
+pool = Pool(processes=50)
 
 for line in irc_page.splitlines():
     if ".html" in line and "href" in line:
