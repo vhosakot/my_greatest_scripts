@@ -1,6 +1,6 @@
 #!/bin/bash
 
-neutron quota-update --network -1 --subnet -1 --port -1 --router -1
+neutron quota-update --network -1 --subnet -1 --port -1 --router -1 --floatingip -1
 
 for i in {1..10} ; do neutron net-create net$i ; done
 
@@ -37,4 +37,15 @@ do
     nova boot --image cirros-0.3.4-x86_64 --flavor m1.tiny --nic net-id=$net_id vm$i
 done
 
+echo "Associated floating IP, please wait..."
+
+for i in {1..10}
+do
+    fip_id=`neutron floatingip-create $ext_net_id | grep " id " | awk '{print $4}'`
+    vm_priv_ip=`nova show vm$i | grep "net$i network" | awk '{print $5}'`
+    vm_port_id=`neutron port-list | grep $vm_priv_ip | awk '{print $2}'`
+    neutron floatingip-associate $fip_id $vm_port_id
+done
+
+neutron floatingip-list
 nova list

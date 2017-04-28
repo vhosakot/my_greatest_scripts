@@ -1,5 +1,9 @@
 #!/bin/bash
 
+neutron floatingip-list | awk '{print $2}' | grep -v '^id' | grep '\S' | xargs -n 1 neutron floatingip-disassociate
+
+neutron floatingip-list | awk '{print $2}' | grep -v '^id' | grep '\S' | xargs -n 1 neutron floatingip-delete
+
 for i in {1..10}
 do
     nova delete vm$i
