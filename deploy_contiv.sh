@@ -55,6 +55,7 @@ echo "done!!"
 #   kubectl describe svc kubernetes
 #   kubectl get configmaps --all-namespaces
 #   kubectl get serviceaccounts --all-namespaces
+#   kubectl get namespaces
 #
 #   kubectl run -i --tty busybox1 --image=busybox
 #      exit
