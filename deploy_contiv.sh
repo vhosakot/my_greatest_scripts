@@ -116,6 +116,7 @@ echo "done!!"
 #    sudo docker ps -a | grep busybox
 #
 # sudo docker volume ls
+# sudo docker info
 #
 # cat /etc/hosts
 # cat /etc/resolv.conf
