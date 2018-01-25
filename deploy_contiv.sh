@@ -122,6 +122,7 @@ echo "done!!"
 # cat /etc/resolv.conf
 # ip a
 # ifconfig
+# ifconfig | grep vport
 # ip route
 # sudo iptables -L -n -v
 # sudo netstat -pan | grep kube
@@ -142,6 +143,7 @@ echo "done!!"
 # sudo find /sys/class/net/contivh0/
 # cat /etc/cni/net.d/1-contiv.conf
 # ls -l /var/log/netcontiv.log
+# printenv
 #
 # sudo find / | grep -i contiv
 #
@@ -168,6 +170,11 @@ echo "done!!"
 # sudo ovs-ofctl --protocols=OpenFlow13 dump-flows contivVxlanBridge
 # sudo ovs-ofctl --protocols=OpenFlow13 dump-ports contivVxlanBridge
 # sudo ovs-ofctl --protocols=OpenFlow13 --help | grep print
+#
+# sudo ovsdb-client list-dbs
+# sudo ovsdb-client list-tables
+# sudo ovsdb-client list-columns
+# sudo ovsdb-client get-schema
 #
 #
 #
