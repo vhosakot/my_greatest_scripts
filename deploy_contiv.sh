@@ -117,6 +117,9 @@ echo "done!!"
 #
 # sudo docker volume ls
 # sudo docker info
+# sudo docker network ls
+#
+# sudo docker network ls | awk '{print $1}' | grep -v NETWORK | xargs -n 1 -I % -- sh -c "echo \"============\" && echo % && echo \"============\" && sudo docker network inspect %"
 #
 # cat /etc/hosts
 # cat /etc/resolv.conf
