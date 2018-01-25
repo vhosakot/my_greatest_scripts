@@ -139,6 +139,7 @@ echo "done!!"
 # sudo find /proc/sys/net | grep -i contiv
 # ls -lR /run/contiv
 # ls -lR /run/openvswitch
+# sudo cat /etc/sysconfig/openvswitch
 # sudo find /sys/devices/virtual/net | grep -i contiv
 # sudo find /sys/class/net/contivh0/
 # cat /etc/cni/net.d/1-contiv.conf
