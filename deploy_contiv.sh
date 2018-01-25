@@ -74,7 +74,7 @@ echo "done!!"
 #      cat /etc/resolv.conf
 #      ip a
 #      ifconfig
-#      iproute
+#      ip route
 #      netstat -pan
 #      lsof
 #
