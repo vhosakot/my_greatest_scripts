@@ -82,8 +82,8 @@ echo "done!!"
 #   kubectl attach busybox3-5bb6d954d7-vlsnr -c busybox3 -i -t
 #
 #   kubectl get pods -o wide
-#   kubectl get all
-#   kubectl get all | grep busybox
+#   kubectl get all -o wide
+#   kubectl get all -o wide | grep busybox
 #
 #   netctl network ls
 #   netctl network inspect default-net
