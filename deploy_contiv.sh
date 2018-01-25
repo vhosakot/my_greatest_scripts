@@ -178,7 +178,7 @@ echo "done!!"
 # sudo ovsdb-client list-columns
 # sudo ovsdb-client get-schema
 #
-# etcdctl cluster-health
+# etcdctl -C http://netmaster:6666 cluster-health
 # etcdctl -C http://netmaster:6666 ls -p --recursive
 # etcdctl -C http://192.168.2.10:6666 ls -p --recursive
 # etcdctl -C http://netmaster:6666 member list
