@@ -68,7 +68,7 @@ echo "done!!"
 #
 #   kubectl attach busybox1-84b586b4d7-7cq4w -c busybox1 -i -t
 #      nslookup localhost
-#      nslookup nslookup kubernetes.default
+#      nslookup kubernetes.default
 #      nslookup kubernetes.default.svc.cluster.local
 #      cat /etc/hosts
 #      cat /etc/resolv.conf
