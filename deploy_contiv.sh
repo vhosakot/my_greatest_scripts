@@ -82,6 +82,7 @@ echo "done!!"
 #
 #   kubectl get pods -o wide
 #   kubectl get all
+#   kubectl get all | grep busybox
 #
 #   netctl network ls
 #   netctl network inspect default-net
@@ -165,3 +166,17 @@ echo "done!!"
 # sudo ovs-ofctl --protocols=OpenFlow13 dump-flows contivVxlanBridge
 # sudo ovs-ofctl --protocols=OpenFlow13 dump-ports contivVxlanBridge
 # sudo ovs-ofctl --protocols=OpenFlow13 --help | grep print
+#
+#
+#
+#############################
+#  delete the busybox pods  #
+#############################
+# cd /root/go/src/github.com/contiv/netplugin/vagrant/k8s
+# vagrant status
+# vagrant ssh k8master
+#
+#   kubectl get all | grep busybox
+#   kubectl delete deployment busybox1
+#   kubectl delete deployment busybox2
+#   kubectl delete deployment busybox3
