@@ -135,6 +135,7 @@ echo "done!!"
 # ls -l /shared/contiv.yaml
 # ls -l /vagrant/export/contiv.yaml
 # ls -lR /var/log/contiv
+# ls -l /var/log/contivk8s.log
 # ls -lR /proc/sys/net/ipv4/conf/contivh0
 # sudo find /proc/sys/net | grep -i contiv
 # ls -lR /run/contiv
