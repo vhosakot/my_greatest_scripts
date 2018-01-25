@@ -122,7 +122,7 @@ echo "done!!"
 # cat /etc/resolv.conf
 # ip a
 # ifconfig
-# iproute
+# ip route
 # sudo iptables -L -n -v
 # sudo netstat -pan | grep kube
 # sudo lsof | grep kube
