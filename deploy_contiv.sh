@@ -177,6 +177,20 @@ echo "done!!"
 # sudo ovsdb-client list-columns
 # sudo ovsdb-client get-schema
 #
+# etcdctl cluster-health
+# etcdctl -C http://netmaster:6666 ls -p --recursive
+# etcdctl -C http://192.168.2.10:6666 ls -p --recursive
+# etcdctl -C http://netmaster:6666 member list
+# etcdctl -C http://192.168.2.10:6666 member list
+# etcdctl -C http://netmaster:6666 role list
+# etcdctl -C http://netmaster:6666 role get root
+# kubectl get pods --all-namespaces -o wide | grep 192.168.2.10
+# ping netmaster
+#
+# etcdctl -C http://netmaster:6666 ls -p --recursive | grep -v '/$' | xargs -n 1 -I % -- sh -c "echo \"============\" && echo % && echo \"============\" && etcdctl -C http://netmaster:6666 get %"
+#
+# etcdctl -C http://192.168.2.10:6666 ls -p --recursive | grep -v '/$' | xargs -n 1 -I % -- sh -c "echo \"============\" && echo % && echo \"============\" && etcdctl -C http://netmaster:6666 get %"
+#
 #
 #
 #############################
