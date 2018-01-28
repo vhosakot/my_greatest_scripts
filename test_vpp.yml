@@ -1,0 +1,106 @@
+# Steps to run this playbook:
+#
+# cd ansible-systems/
+# source venv/bin/activate
+# export ANSIBLE_VAULT_PASSWORD_FILE="~/.config/ansible-systems/vault-proxmox.pass"
+# source ${PROXMOX_AXION_DIR:-~/.axion}/env
+# 
+# ansible-playbook roles/cisco.vpp/tests/test_vpp.yml --become
+# 
+# To turn on ansible verbose debugs:
+# ansible-playbook roles/cisco.vpp/tests/test_vpp.yml --become -vvvv
+
+---
+- name: Gather facts of all systems
+  hosts: mcp
+  gather_facts: yes
+
+- name: Test VPP in vFusion
+  hosts: mcp
+  tasks:
+    - name: Check vpp packages
+      shell: yum list installed | grep -i vpp
+      register: result
+      failed_when: "'vpp' not in result.stdout"
+      ignore_errors: True
+
+    - name: Check etcd packages
+      shell: yum list installed | grep -i etcd
+      register: result
+      failed_when: "'etcd' not in result.stdout"
+      ignore_errors: True
+
+    - name: sudo vppctl show version
+      command: sudo vppctl show version
+      register: result
+      failed_when: "'vpp v17.01' not in result.stdout"
+      ignore_errors: True
+
+    - name: sudo vppctl show int
+      command: sudo vppctl show int
+      register: result
+      failed_when: "'BondEthernet' not in result.stdout or \
+                    'GigabitEthernet' not in result.stdout or \
+                    'bond-slave' not in result.stdout or \
+                    'local0' not in result.stdout"
+      ignore_errors: True
+
+    - name: sudo vppctl show pci
+      shell: sudo vppctl show pci | grep pci | wc -l
+      register: result
+      failed_when: "'4' not in result.stdout"
+      ignore_errors: True
+
+    - name: sudo vppctl show bridge-domain
+      command: sudo vppctl show bridge-domain
+      register: result
+      failed_when: result.stdout == ''
+      ignore_errors: True
+
+    - name: Check vpp on each mcp
+      shell: ps aux | grep -i vpp | grep -v grep
+      register: result
+      failed_when: result.stdout == ''
+      ignore_errors: True
+
+    - name: neutron agent-list
+      shell: source /etc/metacloud/openrc.sh && neutron agent-list | grep -v ':-)\|agent_type\|--------'
+      register: result
+      failed_when: result.stdout != ''
+      ignore_errors: True
+
+    - name: Check errors in /var/log/vpp.log
+      shell: grep -i 'error\|fail\|traceback\|exception' /var/log/vpp.log
+      register: result
+      failed_when: result.stdout != ''
+      ignore_errors: True
+
+    - name: Check errors in neutron logs
+      shell: grep -i 'levelname="ERROR"\|fail\|trace' /var/log/openstack/neutron-* | grep -v 'levelname="DEBUG"'
+      register: result
+      ignore_errors: True
+
+    - name: Check vpp and etcd messages in syslog
+      shell: grep -i 'vpp\|etcd' /var/log/messages
+      register: result
+      failed_when: result.rc == 2
+      ignore_errors: True
+
+    - name: Check neutron-server on each mcp
+      shell: crm_mon -1 -r -R | grep neutron-server | grep Started | wc -l
+      register: result
+      failed_when: "'3' not in result.stdout"
+      ignore_errors: True
+
+    - name: Find mcp on which neutron-dhcp-agent is running
+      shell: crm_mon -1 -r -R | grep -i dhcp | grep Started | grep -o 'mcp[0-9]'
+      register: mcp_running_dhcp_agent
+      failed_when: mcp_running_dhcp_agent.stdout == ''
+      ignore_errors: True
+
+    - name: Check vpp agent on mcp running neutron-dhcp-agent
+      shell: ps aux | grep -i vpp | grep -v grep
+      register: result
+      failed_when: result.stdout == ''
+      when: "mcp_running_dhcp_agent.stdout in ansible_hostname"
+      ignore_errors: True
