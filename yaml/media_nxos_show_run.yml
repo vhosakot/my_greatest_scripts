@@ -1,0 +1,9 @@
+---
+# uses ansible python module nxos_command.py to get running-config from N9k
+
+- name: get output of "show run" from n9k
+  hosts: mdc2-n9k1
+  connection: local
+  gather_facts: no
+  tasks:
+    - nxos_command: command='show run' host={{ inventory_hostname }}
