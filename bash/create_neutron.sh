@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# 5555
+# 4444
+# 3333
+# 2222
+# 1111
+# test
 neutron quota-update --network -1 --subnet -1 --port -1 --router -1 --floatingip -1
 
 for i in {1..10} ; do neutron net-create net$i ; done
