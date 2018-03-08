@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# changed in master branch
 neutron floatingip-list | awk '{print $2}' | grep -v '^id' | grep '\S' | xargs -n 1 neutron floatingip-disassociate
 
 neutron floatingip-list | awk '{print $2}' | grep -v '^id' | grep '\S' | xargs -n 1 neutron floatingip-delete
