@@ -1,0 +1,25 @@
+submodule test-comp-submodule-typedef {
+	belongs-to "test-comp" {
+		prefix test-comp;
+	}
+        organization "Test";
+        contact "osh-mgbl-test";
+	description "Submodule for typedefs";
+	revision "2013-08-15" {
+		description "First revision of sub module";
+                reference "";
+	}
+        //Define couple of typedefs
+        typedef Integer32 {
+                type int32 {
+                        range "1..63000";
+                }
+                description "typedef 1";
+                reference "Integer32 reference";
+        }
+        typedef String {
+                type string {
+                }
+                description "typedef 2";
+        }
+}

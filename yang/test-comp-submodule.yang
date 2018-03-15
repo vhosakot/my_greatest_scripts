@@ -1,0 +1,133 @@
+submodule test-comp-submodule {
+	belongs-to "test-comp" {
+		prefix test-comp;
+	}
+	
+	import ietf-yang-types {
+		prefix "yang";
+	}
+	//Import Inet Types
+	import ietf-inet-types {
+		prefix inet;
+	}
+        organization "Test";
+        contact "osh-mgbl-test";
+	description "Submodule version 1";
+	revision "2013-07-30" {
+		description "First revision of sub module";
+                reference "";
+	}
+	grouping datatypes_leaf_group
+	{
+		description "Group with leafs of different datatypes";
+                leaf int8_leaf
+                {
+                        type int8;
+                        default -1;
+                        description "int8 leaf in submodule";
+                }
+                leaf int16_leaf
+                {
+                        type int16;
+                        default -10;
+                        description "leaf 1 in submodule";
+                }
+		leaf int32_leaf
+		{
+			type int32;
+			default 10;
+                        description "leaf 2 in submodule";
+		}
+		leaf int64_leaf {
+			type int64;
+			default 67000;
+                        description "leaf 3 in submodule";
+		}
+                leaf uint8_leaf
+                {
+                        type uint8;
+                        default 1;
+                        description "uint8 leaf in submodule";
+                }
+
+                leaf uint16_leaf {
+                        type uint16;
+                        description "leaf 4 in submodule";
+                }
+		leaf uint32_leaf {
+			type uint32;
+                        description "leaf 5 in submodule";
+		}
+		leaf uint64_leaf {
+			type uint64;
+                        description "leaf 6 in submodule";
+		}
+		leaf string_leaf 
+		{
+			type string;
+                        default "string";
+                        description "leaf 7 in submodule";
+		}
+                leaf another_string_leaf
+                {
+                        type string;
+                        default "1234567890qwertyuiopasdfghjklzxcvbnmmnbvcxzLKJHGFDSAPOIUYTREWQ0987654321qwertyuioplkjhgfdsazxcvbnm";
+                        description "leaf 7a in submodule";
+                }
+		leaf boolean_leaf {
+			type boolean;
+                        description "leaf 8 in submodule";
+		}
+		leaf enumeration_leaf {
+			type enumeration {
+				enum enum1 {
+                                    description "enum 1";
+                                }
+				enum enum2 {
+                                    description "enum 2";
+                                }
+				enum enum3 {
+                                    description "enum 3";
+                                }
+			}
+                        description "leaf 9 in submodule";
+		}
+		leaf bits_leaf {
+			type bits {
+				bit firstBit {
+					position 0;
+                                        description "bit 1";
+				}
+				bit secondBit {
+					position 1;
+                                        description "bit 2";
+				}
+				bit thirdBit {
+					position 2;
+                                        description "bit 3";
+				}
+			}
+                        description "leaf 10 in submodule";
+		}
+		leaf empty_leaf {
+			type empty;
+                        description "leaf 11 in submodule";
+		}
+		leaf mac_leaf {
+			type yang:mac-address;
+                        description "leaf 12 in submodule";
+		}
+		leaf timestamp_leaf {
+			type yang:timestamp;
+                        description "leaf 13 in submodule";
+		}
+		leaf ipv4_leaf {
+			type inet:ipv4-address;
+                        description "leaf 14 in submodule";
+		}
+		leaf ipv6_leaf {
+			type inet:ipv6-address;
+                        description "leaf 15 in submodule";
+		}
+	}
+}

@@ -1,0 +1,161 @@
+submodule test-comp-submodule-grouping {
+	belongs-to "test-comp" {
+		prefix test-comp;
+	}
+        //Import the Standard Yang types
+        import ietf-yang-types {
+                prefix "yang";
+        }
+        organization "Test";
+        contact "osh-mgbl-test";
+	description "Submodule for groupings";
+	revision "2013-08-15" {
+		description "First revision of sub module";
+                reference "";
+	}
+        grouping simple_grouping {
+                description "grouping 1";
+                leaf leaf1 {
+                        type int32;
+                        default 200;
+                        description "leaf 1";
+                }
+                leaf leaf2 {
+                        type string;
+                        description "leaf 2";
+                }
+                leaf leaf3 {
+                        type yang:mac-address;
+                        mandatory true;
+                        description "leaf 3";
+                }
+        }
+        //Grouping with different types of objects
+        grouping assorted_group {
+                description "grouping 2";
+                container group_container {
+                        description "container 1";
+                        leaf group_leaf {
+                                type uint32;
+                                description "leaf 4";
+                        }
+                        leaf-list group_leaf_list
+                        {
+                                type uint32;
+                                description "leaf-list 1";
+                        }
+                        leaf-list group_oper_leaf_list
+                        {
+                                type uint32;
+                                config "false";
+                                description "group_oper_leaf_list 1";
+                        }
+                        list group_list {
+                                key name;
+                                description "list 1";
+                                leaf name {
+                                        type string;
+                                        description "leaf 5";
+                                }
+                                leaf value {
+                                        type int32;
+                                        description "leaf 5a";
+                                }
+                                leaf pair {
+                                        type string;
+                                        description "leaf 6";
+                                }
+                        }
+                }
+                leaf assorted_group_leaf1 {
+                    type int32;
+                    description "leaf assorted_group_leaf1";
+                }
+                leaf assorted_group_leaf2 {
+                    type int32;
+                    description "leaf assorted_group_leaf2";
+                }
+        }
+        // Grouping with oper container and config leafs
+        grouping grouping_oper_container_config_leafs {
+            description "grouping 2a";
+            container oper_container {
+                config false;
+                description "oper_container in grouping";
+                leaf oper_container_leaf {
+                        type int32;
+                        description "leaf 7";
+                }
+            }
+            leaf config_leaf1 {
+                    type int32;
+                    config true;
+                    description "config_leaf1 in grouping";
+            }
+            leaf config_leaf2 {
+                    type int32;
+                    config true;
+                    description "config_leaf2 in grouping";
+            }
+        }
+        // Grouping with config container and oper leafs
+        grouping grouping_config_container_oper_leafs {
+            description "grouping 2b";
+            container config_container {
+                config true;
+                description "config_container in grouping";
+                leaf config_container_leaf {
+                        type int32;
+                        description "leaf 7a";
+                }
+            }
+            leaf oper_leaf1 {
+                    type int32;
+                    config false;
+                    description "oper_leaf1 in grouping";
+            }
+            leaf oper_leaf2 {
+                    type int32;
+                    config false;
+                    description "oper_leaf2 in grouping";
+            }
+        }
+        //Grouping with a config container and an oper container
+        grouping config_oper_mixed {
+            description "grouping 2c";
+            container config_container {
+                config true;
+                description "config_container in grouping";
+                leaf config_container_leaf {
+                        type int32;
+                        description "leaf 7b";
+                }
+            }
+            container oper_container {
+                config false;
+                description "oper_container in grouping";
+                leaf oper_container_leaf {
+                        type int32;
+                        description "leaf 7c";
+                }
+            }
+        }
+        //Grouping using another grouping
+        grouping grouping_uses_another_grouping {
+            description "grouping 2c";
+            uses simple_grouping;
+        
+        }
+        // Grouping for ulong64
+        grouping ulong64_group {
+            description "grouping for ulong64";
+            leaf high {
+                    type uint32;
+                    description "high leaf";
+            }
+            leaf low {
+                    type uint32;
+                    description "low leaf";
+            }
+        }
+}

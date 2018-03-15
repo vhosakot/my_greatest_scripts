@@ -1,0 +1,27 @@
+submodule test-comp-submodule-notification {
+	belongs-to "test-comp" {
+		prefix test-comp;
+	}
+        include test-comp-submodule;
+        organization "Test";
+        contact "osh-mgbl-test";
+	description "Submodule for rpc";
+	revision "2013-08-15" {
+		description "First revision of sub module";
+                reference "";
+	}
+        //Repeat with different datatypes for input and output
+        //Notification
+        notification test_notif {
+                description "notification";
+                leaf notif_int {
+                        type int32;
+                        description "leaf 54";
+                }
+                leaf notif_string {
+                        type int32;
+                        description "leaf 55";
+                }
+                uses datatypes_leaf_group;
+        }
+}

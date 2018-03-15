@@ -1,0 +1,31 @@
+submodule test-comp-submodule-rpc {
+	belongs-to "test-comp" {
+		prefix test-comp;
+	}
+        include test-comp-submodule-grouping;
+        organization "Test";
+        contact "osh-mgbl-test";
+	description "Submodule for rpc";
+	revision "2013-08-15" {
+		description "First revision of sub module";
+                reference "";
+	}
+        rpc test_action {
+                description "rpc";
+                input {
+                        leaf input_int {
+                                type int32;
+                                description "leaf 52";
+                        }
+                        uses simple_grouping;
+
+                }
+                output {
+                        leaf output_string {
+                                type string;
+                                description "leaf 53";
+                        }
+                        uses simple_grouping;
+                }
+        }
+}

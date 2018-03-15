@@ -1,0 +1,620 @@
+//#include <xos.h>
+module test-comp {
+	namespace "test";
+	prefix "test-comp";
+	//Import the Standard Yang types
+	import ietf-yang-types {
+		prefix "yang";
+	}
+	//Import Inet Types
+	import ietf-inet-types {
+		prefix inet;
+	}
+        // Include all submodules
+	include test-comp-submodule;
+        include test-comp-submodule-typedef;
+        include test-comp-submodule-grouping;
+        include test-comp-submodule-rpc;
+        include test-comp-submodule-notification;
+	organization "Test";
+        contact "osh-mgbl-test";
+	description "Test Yang model used to test OSH manageability";
+	revision 2013-07-01 {
+		description "First revision";
+		reference "";
+	}
+        // extension
+        extension c-define {
+          argument "name";
+          description
+            "Takes as argument a name string.
+            Makes the code generator use the given name in the
+            #define.";
+        }
+
+        container test-comp {
+        description "Top level root test-comp container";
+
+	//Top level simple config container using assorted group
+	container cfg_top {
+                config true;
+                description "container 2";
+		uses assorted_group;
+	}
+
+        //config container with datatypes
+        container cfg_container_with_datatypes {
+                config true;
+                description "container 2a";
+                uses assorted_group;
+                leaf cfg_container_with_datatypes_leaf1 {
+                    type string;
+                    default "";
+                    description 
+                     "leaf cfg_container_with_datatypes_leaf1";
+                }
+                leaf cfg_container_with_datatypes_leaf2 {
+                   type uint32;
+                   default 25;
+                   description 
+                    "leaf cfg_container_with_datatypes_leaf2";
+                }
+                leaf this_leaf_has_a_name_with_large_number_of_characters_with_alphabets_and_underscores {
+                   type uint32;
+                   default 25;
+                   description
+                    "leaf cfg_container_with_datatypes_leaf3";
+                }
+        }
+
+	//Top level simple oper container using assorted group
+	container oper_top {
+                config false;
+                description "container 3";
+		uses assorted_group;
+	}
+
+        //oper container with datatypes
+        container oper_container_with_datatypes {
+                config false;
+                description "container 3a";
+                uses assorted_group;
+                leaf oper_container_with_datatypes_leaf1 {
+                    type string;
+                    default "";
+                    description 
+                     "leaf oper_container_with_datatypes_leaf1";
+                }
+                leaf oper_container_with_datatypes_leaf2 {
+                   type uint32;
+                   default 25;
+                   description 
+                    "leaf oper_container_with_datatypes_leaf2";
+                }
+        }
+
+        //container using grouping with oper container 
+        //and config leafs
+        container oper_top1 {
+                description "container 3b";
+                uses grouping_oper_container_config_leafs;
+        }
+
+        //container using grouping with config container 
+        //and oper leafs
+        container cfg_top1 {
+                description "container 3c";
+                uses grouping_config_container_oper_leafs;
+        }
+
+        //container using grouping with config container
+        //and oper container
+        container using_mixed_grouping  {
+                description "container 3d";
+                uses config_oper_mixed;
+        }
+
+	//Top level mixed oper and config
+	container mixed_cont {
+                description "container 4";
+		container cfg_nest {
+                        description "container 5";
+			uses assorted_group;
+		}
+		container oper_nest {
+                        config false;
+                        description "container 6";
+			uses assorted_group;
+		}
+	}
+
+        //Root config container with nested oper containers
+        container mixed_cont1 {
+                config true;
+                description "container 4a";
+                container oper_nest1 {
+                    config false;
+                    description "container 6a";
+                    container oper_nest1_1 {
+                        config false;
+                        description "container 6a_a";
+                        uses assorted_group;
+                    }
+                }
+                container oper_nest2 {
+                    config false;
+                    description "container 6b";
+                    uses assorted_group;
+                }
+        }
+
+        //Container that uses a grouping using another grouping
+        container container_grouping_uses_another_grouping {
+                description "container 7a";
+                uses grouping_uses_another_grouping;
+        }
+
+	//Container with grouping of leafs of different datatypes
+	container leafs_datatypes {
+                description "container 7";
+		uses datatypes_leaf_group;
+	}
+	//Container with grouping container for all supported objects
+    //Test levels of container nesting 4 levels with config
+	container test-container1 {
+                description "container 8";
+		leaf container1_leaf {
+			type int32;
+                        config false;
+                        description "leaf 7";
+		}
+		container test-container2 {
+                        description "container 9";
+			leaf container2_leaf {
+				type string;
+                                description "leaf 8";
+			}
+                        leaf default_mac_addr {
+                                type yang:mac-address;
+                                default "0024.f716.3f41";
+                                description "leaf 34a";
+                        }
+			container test-container3 {
+                                description "container 9";
+				list container3_leaf {
+                                        key name_nested;
+                                        description "list 2";
+					leaf name_nested {
+						type string;
+                                                description "leaf 9";
+					}
+					leaf value_nested {
+						type uint32;
+                                                description
+                                                 "leaf 10";
+					}
+					leaf pair_nested {
+						type string;
+                                                description
+                                                "leaf 11";
+					}
+				}
+				container test-container4 {
+                                        description "container 10";
+					leaf container4_leaf {
+						type string;
+                                                description
+                                                "leaf 12";
+					}
+				}
+			}
+		}
+	}
+	//Test levels of container nesting 4 levels with  oper
+	container test-container1-oper {
+                config false;
+                description "container 11";
+		leaf container1_leaf {
+			type int32;
+                        description "leaf 13";
+		}
+		container test-container2 {
+                        description "container 12";
+			leaf container2_leaf {
+				type string;
+                                description "leaf 14";
+			}
+			container test-container3 {
+                                description "container 13";
+				list container3_leaf {
+                                        key name_nested;
+                                        description "list 3";
+					leaf name_nested {
+						type string;
+                                                description
+                                                "leaf 15";
+					}
+					leaf value_nested {
+						type uint32;
+                                                description
+                                                "leaf 16";
+					}
+					leaf pair_nested {
+						type string;
+                                                description
+                                                "leaf 17";
+					}
+				}
+				container test-container4 {
+                                        description "container 14";
+					leaf container4_leaf {
+						type string;
+                                                description
+                                                "leaf 18";
+					}
+				}
+			}
+		}
+	}
+	//Nesting of lists
+	container nested_lists_container {
+                description "container 15";
+		list nested_list_1 {
+                        key mac_add;
+                        description "list 4";
+			leaf mac_add {
+				type yang:mac-address;
+                                description "leaf 19";
+			}
+                        leaf timeticks {
+                                type yang:timeticks;
+                                description "leaf 19a";
+                        }
+                        leaf date-and-time {
+                                type yang:date-and-time;
+                                description "leaf 19b";
+                        }
+			list nested_list_2 {
+                                key value_1;
+                                description "list 5";
+				leaf value_1 {
+					type Integer32;
+                                        description "leaf 20";
+				}
+				leaf name_1 {
+					type String;
+                                        description "leaf 21";
+				}
+				list nested_list_3 {
+                                        key name_2;
+                                        description "list 6";
+					leaf name_2 {
+						type string;
+                                                description
+                                                "leaf 22";
+					}
+					leaf value_2 {
+						type uint32;
+                                                description
+                                                "leaf 23";
+					}
+				}
+			}
+			
+		}
+	}
+	//Container with a choice of leafs
+	container leaf_choice {
+                description "container 16";
+		choice leaf_choices {
+                        description "choice";
+			case leaf_case1 {
+				uses simple_grouping;
+			}
+			case leaf_case2 {
+				uses datatypes_leaf_group;
+				
+			}
+			case leaf_case3 {
+				leaf name1 {
+					type string;
+                                        description "leaf 24";
+				}
+				leaf name2 {
+					type empty;
+                                        description "leaf 25";
+				}
+			}
+			case leaf_case4 {
+				leaf value1 {
+					type int32;
+                                        description "leaf 26";
+				}
+				leaf value2 {
+					type int32;
+                                        description "leaf 27";
+				}
+			}
+		}
+	}
+	//Dependent leafs
+	container dep_leafs {
+                description "container 17";
+		leaf enable-leaf1 {
+			type boolean;	
+                        description "leaf 28";
+		}
+		leaf leaf1 {
+			when "../enable-leaf1 = 'true'" {
+                            description "when";
+                        }
+			type uint32 {
+                            range 
+                             "0|1|2|5|10|20|30|60|90|120|180|300";
+			}
+                        description "leaf 29";
+		}
+	}
+	//Container consisting of lists with different keys
+	container list_key_types {
+                description "container 18";
+		//List with integer key
+		list key_int {
+                        key int_key;
+                        description "list 7";
+			leaf int_key {
+				type int32;
+                                description "leaf 30";
+			}
+			uses simple_grouping;
+		}
+		//List with string key
+		list key_string {
+                        key string_key;
+                        description "list 8";
+			leaf string_key {
+				type string;
+                                description "leaf 31";
+			}
+			uses simple_grouping;
+		}
+		//List with unsigned integer key
+		list key_uint {
+                        key uint_key;
+                        description "list 9";
+			leaf uint_key {
+				type uint32;
+                                description "leaf 32";
+			}
+			uses simple_grouping;
+		}
+		//List with boolean key
+		list key_boolean {
+                        key boolean_key;
+                        description "list 10";
+			leaf boolean_key {
+				type boolean;
+                                description "leaf 33";
+			}
+			uses simple_grouping;
+		}
+                //List with config false
+                list config_false {
+                        key config_false_key;
+                        config "false";
+                        description "list 10a";
+                        leaf config_false_key {
+                                type boolean;
+                                description "leaf 33a";
+                        }
+                        uses simple_grouping;
+                }
+		//List with mac address key
+		list key_mac {
+                        key mac_key;
+                        description "list 11";
+			leaf mac_key {
+				type yang:mac-address;
+                                description "leaf 34";
+			}
+			uses simple_grouping;
+		}
+		list key_timestamp {
+                        key timestamp_key;
+                        description "list 12";
+			leaf timestamp_key {
+				type yang:timestamp;
+                                description "leaf 35";
+			}
+			uses simple_grouping;
+		}
+		list key_ipv4 {
+                        key ipv4_key;
+                        description "list 13";
+			leaf ipv4_key {
+				type inet:ipv4-address;
+                                description "leaf 36";
+			}
+			uses simple_grouping;
+		}
+                list key_ipv4_prefix {
+                        key ipv4_key_prefix;
+                        description "list 14";
+                        leaf ipv4_key_prefix {
+                                type inet:ipv4-prefix;
+                                description "leaf 37";
+                        }
+                        uses simple_grouping;
+                }
+                list key_ip {
+                        key ip_key;
+                        description "list 13a";
+                        leaf ip_key {
+                                type inet:ip-address;
+                                description "leaf 36a";
+                        }
+                        uses simple_grouping;
+                }
+                list key_ip_prefix {
+                        key ip_key_prefix;
+                        description "list 14a";
+                        leaf ip_key_prefix {
+                                type inet:ip-prefix;
+                                description "leaf 37a";
+                        }
+                        uses simple_grouping;
+                }
+		list key_ipv6 {
+                        key ipv6_key;
+                        description "list 15";
+			leaf ipv6_key {
+				type inet:ipv6-address;
+                                description "leaf 38";
+			}
+			uses simple_grouping;
+		}
+                list key_ipv6_prefix {
+                        key ipv6_key_prefix;
+                        description "list 16";
+                        leaf ipv6_key_prefix {
+                                type inet:ipv6-prefix;
+                                description "leaf 39";
+                        }
+                        uses simple_grouping;
+                }
+	}
+
+        // Container with when
+        container container_when {
+            description "container 19";
+            leaf for_when1 {
+                type uint32;
+                description "leaf 40";
+            }
+            leaf for_when2 {
+                when "../for_when1 != 2" {
+                    description "when";
+                }
+                type uint32 {
+                    range "1..16"; 
+                }
+                description "leaf 41";
+            }
+        }
+
+        // Container for augment
+        container container_augment {
+            description "container 20";
+            list ifEntry {
+                key "ifIndex";
+                description "list 17";
+                leaf ifIndex {
+                    type int32;
+                    description "leaf 42";
+                }
+            }
+        }
+
+        // Container with must
+        container container_must {
+            leaf ifType {
+                type enumeration {
+                    enum ethernet {
+                        description "enum 1";
+                    }
+                    enum atm {
+                        description "enum 2";
+                    }
+                }
+                description "leaf 44";
+            }
+            leaf ifMTU {
+                type uint32;
+                description "leaf 45";
+            }
+            must "ifType != 'ethernet' or " +
+                 "(ifType = 'ethernet' and ifMTU = 1500)" {
+                error-message "An ethernet MTU must be 1500";
+                description "must 1";
+            }
+            must "ifType != 'atm' or " +
+            "(ifType = 'atm' and ifMTU <= 17966 and ifMTU >= 64)" {
+                error-message "An atm MTU must be  64 .. 17966";
+                description "must 2";
+            }
+            description "container 21";
+        }
+
+        // Container with list and leaf-list with
+        // min-elements, max-elements and ordered-by
+        container container_min_max_orderedby {
+            description "container 22";
+            list group_list_1 {
+                key name;
+                min-elements 1;
+                max-elements 10;
+                leaf name {
+                    type string;
+                    description "leaf 46";
+                }
+                leaf value {
+                    type int32;
+                    description "leaf 47";
+                }
+                leaf pair {
+                    type string;
+                    description "leaf 48";
+                }
+                description "list 18";
+            }
+            leaf-list group_leaf_list_1 {
+                type uint32;
+                min-elements 1;
+                max-elements 10;
+                description "leaf-list 2";
+            }
+            leaf-list cipher  {
+                type string;
+                ordered-by user;
+                description "A list of ciphers";
+            }
+            list user {
+                key "name";
+                ordered-by user;
+                leaf name {
+                    type string;
+                    description "leaf 49";
+                }
+                leaf type {
+                    type string;
+                    description "leaf 50";
+                }
+                leaf full-name {
+                    type string;
+                    description "leaf 51";
+                }
+                description "This is a list of users in the system.";
+            }
+        }
+
+        // container using extension
+        container container_extension {
+            description "container 23";
+            test-comp:c-define "MY_INTERFACES";
+        }
+
+        // container with ulong64
+        container container_ulong64 {
+            description "ulong64 leaf";
+            uses ulong64_group;
+        }
+        }
+
+        augment "/test-comp/container_augment/ifEntry" {
+            description "augment";
+            leaf someNode {
+                type string;
+                description "leaf 43";
+            }
+        }
+}
