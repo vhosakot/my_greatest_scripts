@@ -40,6 +40,11 @@ find ~/.helm -type f -print -exec cat {} \; -printf "\n\n"
 sudo find /ccp_related_files/ -type f -print -exec cat {} \; -printf "\n\n"
 sudo find /var/lib/cloud -type f -print -exec cat {} \; -printf "\n\n"
 sudo find /etc/kubernetes/ -type f -print -exec cat {} \; -printf "\n\n"
+sudo find /etc/cni -type f -print -exec cat {} \; -printf "\n\n"
+sudo find /etc/cloud -type f -print -exec cat {} \; -printf "\n\n"
+sudo find /etc/dnsmasq.d -type f -print -exec cat {} \; -printf "\n\n"
+sudo find /etc/docker -type f -print -exec cat {} \; -printf "\n\n"
+sudo cat /etc/ntp.conf
 
 # get all containers of all pods in all namespaces
 kubectl get pods --all-namespaces | awk '{print $1,$2}' | grep -v 'NAMESPACE NAME' | \
@@ -47,3 +52,54 @@ kubectl get pods --all-namespaces | awk '{print $1,$2}' | grep -v 'NAMESPACE NAM
 
 # get logs of all containers of all pods in all namespaces
 ~/k8s_kubectl_logs_all_pods.py
+
+lsmod
+
+# dump iptables rules and chains
+sudo iptables -S
+sudo iptables -L -n -v
+sudo iptables -t nat -L -n -v
+sudo iptables -t filter -L -n -v
+sudo iptables -t mangle -L -n -v
+sudo iptables -t raw -L -n -v
+sudo iptables -t security -L -n -v
+
+# networking configs
+ip a
+ip -d a
+ifconfig
+ip route
+netstat -r
+ip neigh
+arp -n
+cat /etc/resolv.conf
+cat /etc/hosts
+cat /etc/networks
+sudo find /etc/network -type f -print -exec cat {} \; -printf "\n\n"
+sudo find /etc/dhcp -type f -print -exec cat {} \; -printf "\n\n"
+sudo find /var/lib/dhcp -type f -print -exec cat {} \; -printf "\n\n"
+
+# open ports
+sudo netstat -pan
+
+# systemctl commands
+systemctl --no-pager
+systemctl --no-pager --failed
+systemctl --no-pager list-unit-files
+systemctl --no-pager status -l kubelet.service
+systemctl --no-pager status -l ccp_prevalidation.service
+systemctl --no-pager status *
+systemctl --no-pager status -l cloud-init.service
+systemctl --no-pager status -l cloud-final.service
+systemctl --no-pager status -l cloud-init-local.service
+systemctl --no-pager status -l cloud-config.service
+systemctl --no-pager status -l mastervip.service
+sudo find /etc/systemd/system/ -type f -print -exec cat {} \; -printf "\n\n"
+sudo cat /usr/local/bin/mastervip.sh
+
+# docker commands
+sudo docker images
+sudo docker ps -a
+sudo docker network ls
+sudo docker volume ls
+sudo docker info

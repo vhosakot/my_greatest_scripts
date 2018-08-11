@@ -16,5 +16,6 @@ set -x
 
 user="ccpuser"
 
+ssh $user@$1 "rm -rf ~/k8s_kubectl_logs_all_pods.py"
 scp k8s_kubectl_logs_all_pods.py $user@$1:~/
 cat k8s_dump.sh | ssh $user@$1
