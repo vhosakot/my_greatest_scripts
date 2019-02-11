@@ -33,6 +33,23 @@ func run_sql_command(db *gorm.DB, sql_command string) {
 }
 
 func main() {
+	/* // start: if mysql server has TLS configure
+	rootCertPool := x509.NewCertPool()
+	pem, err := ioutil.ReadFile("/usr/local/share/ca-certificates/ccp-root-ca.crt")
+	if err != nil {
+		    log.Fatal(err)
+	}
+	if ok := rootCertPool.AppendCertsFromPEM(pem); !ok {
+		log.Fatal("Failed to append root CA cert at /usr/local/share/ca-certificates/ccp-root-ca.crt.")
+	}
+	mysql.RegisterTLSConfig("custom", &tls.Config{
+		RootCAs: rootCertPool,
+		InsecureSkipVerify: true,
+	})
+
+	db, err := gorm.Open("mysql", "ccp-user:I6qnD6zNDmqdDLXYg3HqVAk2P@tcp(10.111.202.229:3306)/ccp?tls=custom")
+	*/ // end: if mysql server has TLS configure
+		
 	db, err := gorm.Open("mysql", "ccp-user:kbjHv2M8ndpKNF3S8tE22ILDV@tcp(10.98.148.182:3306)/ccp")
 	defer db.Close()
 
