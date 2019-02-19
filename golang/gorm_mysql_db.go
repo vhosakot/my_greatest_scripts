@@ -33,7 +33,7 @@ func run_sql_command(db *gorm.DB, sql_command string) {
 }
 
 func main() {
-	/* // start: if mysql server has TLS configure
+	/* // start: if mysql server has TLS configured
 	rootCertPool := x509.NewCertPool()
 	pem, err := ioutil.ReadFile("/usr/local/share/ca-certificates/ccp-root-ca.crt")
 	if err != nil {
@@ -48,7 +48,7 @@ func main() {
 	})
 
 	db, err := gorm.Open("mysql", "ccp-user:I6qnD6zNDmqdDLXYg3HqVAk2P@tcp(10.111.202.229:3306)/ccp?tls=custom")
-	*/ // end: if mysql server has TLS configure
+	*/ // end: if mysql server has TLS configured
 		
 	db, err := gorm.Open("mysql", "ccp-user:kbjHv2M8ndpKNF3S8tE22ILDV@tcp(10.98.148.182:3306)/ccp")
 	defer db.Close()
