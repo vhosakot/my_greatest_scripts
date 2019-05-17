@@ -1,0 +1,104 @@
+# build ubuntu docker image
+
+docker build --rm -t test_ubuntu .
+
+$ docker images | grep 'TAG\|ubuntu'
+REPOSITORY   TAG     IMAGE ID       CREATED         SIZE
+test_ubuntu  latest  8aa81b99597e   20 seconds ago  124MB
+ubuntu       18.04   7698f282e524   46 hours ago    69.9MB
+
+# run docker image
+
+docker run --name my_test -d test_ubuntu
+
+$ docker ps -a | grep 'IMAGE\|ubuntu'
+CONTAINER ID   IMAGE         COMMAND                  CREATED         STATUS           PORTS   NAMES
+5b21420b6a20   test_ubuntu   "sh -c 'echo \"== Sta…"  48 seconds ago  Up 47 seconds            my_test
+
+$ docker logs -f my_test
+== Starting TCP server in docker container ==
+Ncat: Version 7.60 ( https://nmap.org/ncat )
+Ncat: Generating a temporary 1024-bit RSA key. Use --ssl-key and --ssl-cert to use a permanent one.
+Ncat: SHA-1 fingerprint: 9A6D 4725 C1B2 4E2C 0640 EE14 3659 5130 F43B 4501
+Ncat: Listening on :::2399
+Ncat: Listening on 0.0.0.0:2399
+
+# in another terminal, test TCP client and send messages to TCP server
+
+$ docker exec -it my_test /bin/bash
+root@5b21420b6a20:/# ncat localhost 2399
+one
+two
+three
+four
+five
+^C
+root@5b21420b6a20:/# exit
+
+# stop and remove the running container
+
+docker rm -f my_test
+
+$ docker ps -a | grep ubuntu
+$ 
+
+# create k8s pod
+
+eval $(minikube docker-env)
+
+kubectl create -f k8s_deployment.yaml
+
+$ kubectl get pods | grep 'NAME\|ubuntu'
+NAME                                             READY   STATUS      RESTARTS   AGE
+my-ubuntu-78b55b74c6-5z7mp                       1/1     Running     0          17s
+
+$ kubectl get all | grep ubuntu
+pod/my-ubuntu-78b55b74c6-5z7mp                       1/1     Running     0          60s
+deployment.apps/my-ubuntu                       1/1     1            1           60s
+replicaset.apps/my-ubuntu-78b55b74c6                       1         1         1       60s
+
+# create k8s service
+
+kubectl create -f k8s_service.yaml 
+
+$ kubectl get svc | grep 'NAME\|ubuntu'
+NAME                            TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                      AGE
+my-ubuntu-service               ClusterIP   10.109.129.68    <none>        2399/TCP                     15s
+
+$ kubectl logs -f my-ubuntu-78b55b74c6-5z7mp
+== Starting TCP server in docker container ==
+Ncat: Version 7.60 ( https://nmap.org/ncat )
+Ncat: Generating a temporary 1024-bit RSA key. Use --ssl-key and --ssl-cert to use a permanent one.
+Ncat: SHA-1 fingerprint: EB91 1A90 80BC 4FA1 52DF F5C7 D386 A478 6EA4 AF53
+Ncat: Listening on :::2399
+Ncat: Listening on 0.0.0.0:2399
+
+# in another terminal, test TCP client and send messages to TCP server
+
+$ kubectl exec -it my-ubuntu-78b55b74c6-5z7mp /bin/bash
+root@my-ubuntu-78b55b74c6-5z7mp:/# ncat localhost 2399
+one
+two
+three
+four
+five
+^C
+root@my-ubuntu-78b55b74c6-5z7mp:/# exit
+
+$ kubectl get all | grep ubuntu
+pod/my-ubuntu-78b55b74c6-5z7mp                       1/1     Running     0          15m
+service/my-ubuntu-service               ClusterIP   10.109.129.68    <none>        2399/TCP                     14m
+deployment.apps/my-ubuntu                       1/1     1            1           15m
+replicaset.apps/my-ubuntu-78b55b74c6                       1         1         1       15m
+
+$ kubectl get all --selector=app=my-ubuntu
+NAME                             READY   STATUS    RESTARTS   AGE
+pod/my-ubuntu-78b55b74c6-5z7mp   1/1     Running   0          18m
+NAME                        READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/my-ubuntu   1/1     1            1           18m
+NAME                                   DESIRED   CURRENT   READY   AGE
+replicaset.apps/my-ubuntu-78b55b74c6   1         1         1       18m
+
+# delete k8s pod and service
+kubectl delete -f k8s_service.yaml
+kubectl delete -f k8s_deployment.yaml

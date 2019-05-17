@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-ubuntu
+  labels:
+    app: my-ubuntu
+spec:
+  selector:
+    matchLabels:
+      app: my-ubuntu
+  template:
+    metadata:
+      labels:
+        app: my-ubuntu
+    spec:
+      containers:
+      - name: my-ubuntu-pod
+        image: test_ubuntu:latest
+        imagePullPolicy: Never
